@@ -1,0 +1,70 @@
+PUNTO 1
+
+Ejercicios de SQL 
+
+nombre tablas 
+tabla empleados
+tabla parentescos
+tabla pagos 
+tabla familiares
+
+select * from empleados
+where sexo = ‘F’
+
+select 
+a.*,
+b.*,
+c.parentesco,
+from empleados a 
+inner join parentes b on a.id = b.idEmpleado
+inner join familiares c on b.idFamiliar = c.id
+where b.parentesco in (‘hijo’, ‘hija’)
+order by a.apellidos asc
+
+
+select
+	a.nombre,
+	count(parentesco)
+	from empleados a 
+	inner join parentesco b on a.id = b.idEmpleado
+	inner join familiares c on b.idFamiliar = c.id
+	group by a.nombre
+
+
+select
+a.nombre
+count parentesco 
+from empleados a 
+inner join parentesco b on a.id = b.idEmpleado
+inner join familiares c  on b.idFamiliar = c.id
+where parentesco in (‘hijo’, ‘hija’)
+group by a.nombre 
+
+select * 
+from empleados a 
+inner pagos b on a.id  = b.idEmpleado
+where fpago between ‘01-01-2022’ and ‘31-01-2022’
+
+select * 
+from empleados 
+where fnacimiento = ‘01-01-2022’
+
+declare @fechaHoy = getdate()
+select *,
+case 
+	when (@fechaHoy - fnacimiento) <= 29 then ‘Joven’
+when (@fechaHoy - fnacimiento) between ‘30’ and ‘49’  then ‘Mayor’
+ 	when (@fechaHoy - fnacimiento) >= 50 then ‘Viejo’
+from empleados
+
+select *
+form empleados a 
+inner pagos b on a.id = b.idEmpleado
+where sum(valor) < ‘2000000’ and fpago between ‘01-01-2021’ and ‘01-12-2021’ 
+
+UPDATE pagos
+            SET valor = valor + 0,04
+
+declarate @fechaHoy  = getdate() 
+delete from familiares
+where (@fechaHoy - fnacimiento) > ‘18’ and parentesco in (‘hijo’, ‘hija’)
